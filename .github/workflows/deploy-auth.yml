@@ -9,10 +9,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: cd auth && docker build -t sibinandhan/auth .
-      - run: docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: cd auth && docker build -t sibinandhan/auth .
+
+      - name: Login to Docker registry
+        run: |
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push sibinandhan/auth
+
+      - name: Push Docker image
+        run: docker push sibinandhan/auth
