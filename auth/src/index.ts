@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { app } from "./app";
 
 const start = async () => {
+  
   mongoose
     .connect(
       "mongodb+srv://sibi:qwertyuiop@cluster0.zrtqknl.mongodb.net/auth?retryWrites=true&w=majority"
