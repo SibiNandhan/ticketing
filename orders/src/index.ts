@@ -15,6 +15,7 @@ const start = async () => {
   if(!process.env.NATS_CLIENT_ID){
     throw new Error('NATS_CLIENT_ID is required')
   }
+  
   app.use(morgan('tiny'));
   mongoose
     .connect(
