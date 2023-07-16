@@ -1,0 +1,38 @@
+apiVersion: apps/v1 #this is like a bucket of kubernetes , deployment is is apps/v1 and pods is in v1
+kind: Deployment
+metadata:
+  name: auth-depl # name of deployment
+spec:
+  replicas: 1 #number of pods to run
+  selector: # which pod to run , so matchLabel -> find everything with label "auth"(just a key value pair...app is not important ..you can name anything)
+    matchLabels:
+      app: auth
+  template: # pod config file
+    metadata:
+      labels:
+        app: auth # the tabel which we apply above
+    spec:
+      containers:
+        - name: auth
+          image: us.gcr.io/ticketing-dev-380007/auth
+          imagePullPolicy: Always
+          env:
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
